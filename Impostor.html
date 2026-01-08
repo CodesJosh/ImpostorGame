@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>El Impostor</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --text-color: #ffffff;
+            --error-color: #cf6679;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 { color: var(--accent-color); margin-bottom: 5px; font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { font-weight: 400; color: #a0a0a0; }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid #333;
+        }
+
+        label {
+            text-align: left;
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            margin-bottom: -10px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: black;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+            touch-action: manipulation;
+        }
+
+        button:active { filter: brightness(0.9); transform: scale(0.98); }
+        button.secondary { background-color: #333; color: white; border: 1px solid #555; }
+        button.reveal-btn { background-color: var(--error-color); color: white;}
+
+        input, select {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            background: #2c2c2c;
+            color: white;
+            font-size: 1.1rem;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus, select:focus { border-color: var(--secondary-color); }
+
+        .hidden { display: none !important; }
+        
+        .role-reveal-box {
+            border: 2px dashed var(--accent-color);
+            border-radius: 12px;
+            padding: 50px 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(187, 134, 252, 0.05);
+            transition: background 0.2s;
+        }
+        
+        .role-reveal-box:active { background: rgba(187, 134, 252, 0.1); }
+
+        #role-text { font-size: 1.5rem; font-weight: bold; white-space: pre-wrap; }
+
+        #timer { font-size: 5rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1;}
+        .big-word { font-size: 2.2rem; font-weight: bold; color: var(--secondary-color); margin: 20px 0; }
+        .impostor-name { color: var(--error-color); font-size: 1.8rem; font-weight: bold;}
+        
+        .footer-note { font-size: 0.8rem; color: #555; margin-top: 20px;}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="setup-screen" class="card">
+            <h1>🕵️ El Impostor</h1>
+            <h2>Configura la partida</h2>
+            
+            <label>¿Cuántos juegan?</label>
+            <input type="number" id="player-count" value="4" min="3" max="20" inputmode="numeric">
+
+            <label>¿Cuántos impostores?</label>
+            <input type="number" id="impostor-count" value="1" min="1" max="3" inputmode="numeric">
+
+            <label>Categoría:</label>
+            <select id="category-select"></select>
+
+            <button onclick="startGame()">Comenzar Partida</button>
+        </div>
+
+        <div id="pass-screen" class="card hidden">
+            <h1 id="player-turn-title">Jugador 1</h1>
+            <p>Pasa el celular a este jugador y que toque el recuadro.</p>
+            
+            <div class="role-reveal-box" id="reveal-box" onclick="toggleRole()">
+                <span id="role-text">TOCA PARA VER<br>TU PALABRA 👆</span>
+            </div>
+            
+            <button id="next-btn" class="hidden" onclick="nextPlayer()">Ocultar y Siguiente Jugador</button>
+        </div>
+
+        <div id="game-screen" class="card hidden">
+            <h1 style="font-size: 1.5rem;">Tiempo Restante</h1>
+            <div id="timer">03:00</div>
+            <p>Háganse preguntas y descubran quién miente.</p>
+            
+            <button class="reveal-btn" onclick="showResolution()">🛑 Terminar y Revelar</button>
+            <button class="secondary" onclick="resetGame()">Cancelar</button>
+        </div>
+
+        <div id="result-screen" class="card hidden">
+            <h2>La Palabra Secreta era:</h2>
+            <div class="big-word" id="secret-word-display">???</div>
+            <hr style="border: 0; border-top: 1px solid #444; width: 100%;">
+            <h2>El Impostor era:</h2>
+            <div class="impostor-name" id="impostor-display">???</div>
+            
+            <button onclick="resetGame()" style="margin-top: 30px;">Jugar Otra Vez</button>
+        </div>
+        
+        <div class="footer-note">Crea tu propia versión en Vercel</div>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS PERSONALIZADA ---
+        const database = {
+            "Animes": [
+                "Dragon Ball Z", "Naruto", "One Piece", "Attack on Titan (Shingeki)", 
+                "Demon Slayer (Kimetsu)", "Evangelion", "Death Note", "Pokémon", 
+                "Sailor Moon", "Hunter x Hunter", "Jujutsu Kaisen", "Spy x Family"
+            ],
+            "Comida Chilena/General": [
+                "Completo Italiano", "Sopaipillas", "Sushi", "Empanada de Pino", 
+                "Cazuela", "Pizza", "Asado", "Chorrillana", 
+                "Humitas", "Pastel de Choclo", "Ceviche", "Lasaña"
+            ],
+            "Personajes Famosos": [
+                "Walter White", "Homero Simpson", "Pedro Pascal", "El Chavo del 8", 
+                "Batman", "Bob Esponja", "Rick Sanchez", "Spiderman", 
+                "Merlina", "Shrek", "Darth Vader", "Messi"
+            ],
+            "Cultura Chilena": [
+                "Plaza Italia", "Metro de Santiago", "La Micro", "Fantasilandia", 
+                "La Moneda", "Viña del Mar", "Cordillera de los Andes", "Vega Central", 
+                "31 Minutos", "Condorito", "Estadio Nacional", "La Piojera"
+            ],
+            "Lugares Comunes": [
+                "Playa", "Cementerio", "Motel", "Hospital", "Cárcel", 
+                "Aeropuerto", "Gimnasio", "Biblioteca", "Zoologico", "Cine"
+            ]
+        };
+
+        // --- LÓGICA DEL JUEGO ---
+        let players = [];
+        let currentPlayerIndex = 0;
+        let secretWord = "";
+        let impostorIndices = [];
+        let timerInterval;
+
+        // Cargar categorías al inicio
+        const categorySelect = document.getElementById('category-select');
+        Object.keys(database).forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.innerText = cat;
+            categorySelect.appendChild(option);
+        });
+
+        function startGame() {
+            const playerCount = parseInt(document.getElementById('player-count').value);
+            const impostorCount = parseInt(document.getElementById('impostor-count').value);
+            const category = document.getElementById('category-select').value;
+            
+            // Validaciones básicas
+            if (isNaN(playerCount) || playerCount < 3) { alert("Mínimo 3 jugadores"); return; }
+            if (impostorCount >= playerCount) { alert("¡Demasiados impostores!"); return; }
+
+            // Lógica de selección
+            const words = database[category];
+            secretWord = words[Math.floor(Math.random() * words.length)];
+            
+            players = new Array(playerCount).fill("Ciudadano");
+            impostorIndices = [];
+            
+            while (impostorIndices.length < impostorCount) {
+                let r = Math.floor(Math.random() * playerCount);
+                if (!impostorIndices.includes(r)) {
+                    impostorIndices.push(r);
+                    players[r] = "Impostor";
+                }
+            }
+
+            currentPlayerIndex = 0;
+            switchScreen('pass-screen');
+            updatePassScreen();
+        }
+
+        function updatePassScreen() {
+            document.getElementById('player-turn-title').innerText = `Jugador ${currentPlayerIndex + 1}`;
+            const boxText = document.getElementById('role-text');
+            boxText.innerHTML = "TOCA PARA VER<br>TU PALABRA 👆";
+            boxText.style.color = "#ffffff";
+            
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('reveal-box').style.pointerEvents = "auto";
+            document.getElementById('reveal-box').style.borderColor = "#bb86fc";
+        }
+
+        function toggleRole() {
+            const boxText = document.getElementById('role-text');
+            const isImpostor = players[currentPlayerIndex] === "Impostor";
+            
+            // Si el texto es el inicial, revelamos
+            if (boxText.innerHTML.includes("TOCA")) {
+                if (isImpostor) {
+                    boxText.innerHTML = "🤫 ERES EL<br><span style='font-size:2rem; color:#cf6679'>IMPOSTOR</span>";
+                } else {
+                    boxText.innerHTML = `LA PALABRA ES:<br><span style='font-size:2rem; color:#03dac6'>${secretWord}</span>`;
+                }
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('reveal-box').style.pointerEvents = "none"; 
+            }
+        }
+
+        function nextPlayer() {
+            currentPlayerIndex++;
+            if (currentPlayerIndex < players.length) {
+                updatePassScreen();
+            } else {
+                startTimer(180); // 3 minutos por defecto
+                switchScreen('game-screen');
+            }
+        }
+
+        function startTimer(duration) {
+            let timer = duration, minutes, seconds;
+            const display = document.getElementById('timer');
+            clearInterval(timerInterval);
+            
+            // Función para actualizar visualmente
+            const updateDisplay = () => {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (timer <= 10) display.style.color = "#cf6679"; // Rojo al final
+                else display.style.color = "#ffffff";
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    display.textContent = "¡TIEMPO!";
+                    // Vibrar si el celular lo soporta
+                    if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+                }
+            };
+
+            updateDisplay(); // Ejecutar una vez al inicio
+            timerInterval = setInterval(updateDisplay, 1000);
+        }
+
+        function showResolution() {
+            clearInterval(timerInterval);
+            document.getElementById('secret-word-display').innerText = secretWord;
+            
+            const impostorNames = impostorIndices.map(i => `Jugador ${i + 1}`).join(", ");
+            document.getElementById('impostor-display').innerText = impostorNames;
+            
+            switchScreen('result-screen');
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            switchScreen('setup-screen');
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
