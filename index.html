@@ -28,7 +28,7 @@
         }
 
         h1 { color: var(--accent-color); margin-bottom: 5px; font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; }
-        h2 { font-weight: 400; color: #a0a0a0; }
+        h2 { font-weight: 400; color: #a0a0a0; margin-top: 0; }
 
         .container {
             max-width: 500px;
@@ -67,6 +67,7 @@
             font-weight: bold;
             margin-top: 10px;
             touch-action: manipulation;
+            transition: transform 0.1s;
         }
 
         button:active { filter: brightness(0.9); transform: scale(0.98); }
@@ -102,9 +103,9 @@
         
         .role-reveal-box:active { background: rgba(187, 134, 252, 0.1); }
 
-        #role-text { font-size: 1.5rem; font-weight: bold; white-space: pre-wrap; }
+        #role-text { font-size: 1.5rem; font-weight: bold; white-space: pre-wrap; line-height: 1.4; }
 
-        #timer { font-size: 5rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1;}
+        #timer { font-size: 5rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1; margin: 20px 0;}
         .big-word { font-size: 2.2rem; font-weight: bold; color: var(--secondary-color); margin: 20px 0; }
         .impostor-name { color: var(--error-color); font-size: 1.8rem; font-weight: bold;}
         
@@ -143,7 +144,7 @@
 
         <div id="game-screen" class="card hidden">
             <h1 style="font-size: 1.5rem;">Tiempo Restante</h1>
-            <div id="timer">03:00</div>
+            <div id="timer">00:00</div>
             <p>Háganse preguntas y descubran quién miente.</p>
             
             <button class="reveal-btn" onclick="showResolution()">🛑 Terminar y Revelar</button>
@@ -269,7 +270,12 @@
             if (currentPlayerIndex < players.length) {
                 updatePassScreen();
             } else {
-                startTimer(180); // 3 minutos por defecto
+                // --- LÓGICA DE TIEMPO DINÁMICO ---
+                // 45 segundos por jugador. Mínimo 180 seg (3 minutos).
+                const secondsPerPlayer = 45; 
+                let totalTime = Math.max(180, players.length * secondsPerPlayer);
+                
+                startTimer(totalTime); 
                 switchScreen('game-screen');
             }
         }
