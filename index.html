@@ -167,31 +167,93 @@
     <script>
         // --- BASE DE DATOS PERSONALIZADA ---
         const database = {
-            "Animes": [
-                "Dragon Ball Z", "Naruto", "One Piece", "Attack on Titan (Shingeki)", 
-                "Demon Slayer (Kimetsu)", "Evangelion", "Death Note", "Pokémon", 
-                "Sailor Moon", "Hunter x Hunter", "Jujutsu Kaisen", "Spy x Family"
-            ],
-            "Comida Chilena/General": [
-                "Completo Italiano", "Sopaipillas", "Sushi", "Empanada de Pino", 
-                "Cazuela", "Pizza", "Asado", "Chorrillana", 
-                "Humitas", "Pastel de Choclo", "Ceviche", "Lasaña"
-            ],
-            "Personajes Famosos": [
-                "Walter White", "Homero Simpson", "Pedro Pascal", "El Chavo del 8", 
-                "Batman", "Bob Esponja", "Rick Sanchez", "Spiderman", 
-                "Merlina", "Shrek", "Darth Vader", "Messi"
-            ],
-            "Cultura Chilena": [
-                "Plaza Italia", "Metro de Santiago", "La Micro", "Fantasilandia", 
-                "La Moneda", "Viña del Mar", "Cordillera de los Andes", "Vega Central", 
-                "31 Minutos", "Condorito", "Estadio Nacional", "La Piojera"
-            ],
-            "Lugares Comunes": [
-                "Playa", "Cementerio", "Motel", "Hospital", "Cárcel", 
-                "Aeropuerto", "Gimnasio", "Biblioteca", "Zoologico", "Cine"
-            ]
-        };
+    "Animes": [
+        "Dragon Ball Z", "Naruto", "One Piece", "Attack on Titan (Shingeki)", 
+        "Demon Slayer (Kimetsu)", "Evangelion", "Death Note", "Pokémon", 
+        "Sailor Moon", "Hunter x Hunter", "Jujutsu Kaisen", "Spy x Family",
+        "My Hero Academia", "Fullmetal Alchemist", "Bleach", "Chainsaw Man",
+        "Tokyo Ghoul", "One Punch Man", "Cowboy Bebop", "Akira",
+        "JoJo's Bizarre Adventure", "Slam Dunk", "Digimon", "Saint Seiya (Caballeros)",
+        "Ranma 1/2", "Inuyasha", "Death Parade", "Your Name",
+        "Spirited Away", "Vinland Saga", "Blue Lock", "Haikyuu!!",
+        "Mob Psycho 100", "Steins;Gate", "Code Geass", "Cyberpunk Edgerunners",
+        "Sword Art Online", "Black Clover", "Dr. Stone", "Fire Force",
+        "Fairy Tail", "The Promised Neverland", "Tokyo Revengers", "Parasyte",
+        "Erased", "Hellsing", "Berserk", "Monster", "Fruits Basket", "Ranking of Kings"
+    ],
+    "Comida Chilena/General": [
+        "Completo Italiano", "Sopaipillas", "Sushi", "Empanada de Pino", 
+        "Cazuela", "Pizza", "Asado", "Chorrillana", 
+        "Humitas", "Pastel de Choclo", "Ceviche", "Lasaña",
+        "Mote con Huesillo", "Paila Marina", "Pantrucas", "Charquicán",
+        "Porotos con Riendas", "Sandwich de Mechada", "Barros Luco", "Churrasco",
+        "Sopaipillas Pasadas", "Manjarate", "Taco", "Hamburguesa",
+        "Papas Fritas", "Pollo con Arroz", "Fideos con Boloñesa", "Empanada de Queso",
+        "Terremoto (Trago/Postre)", "Kuchen de Murta", "Leche Asada", "Arroz con Leche",
+        "Chorrillana Valparaíso", "Caldo de Caldillo de Congrio", "Curanto", "Pulmay",
+        "Milcao", "Chochoca", "Pan con Lisa", "Malaya",
+        "Prietas con Puré", "Costillar al Horno", "Pescado Frito", "Ensalada Chilena",
+        "Pebre", "Chancho en Piedra", "Marraqueta con Queso", "Hallulla con Palta",
+        "Picarones", "Brazo de Reina"
+    ],
+    "Personajes Famosos": [
+        "Walter White", "Homero Simpson", "Pedro Pascal", "El Chavo del 8", 
+        "Batman", "Bob Esponja", "Rick Sanchez", "Spiderman", 
+        "Merlina", "Shrek", "Darth Vader", "Messi",
+        "Cristiano Ronaldo", "Iron Man", "Harry Potter", "Luffy",
+        "Goku", "Dwayne Johnson (La Roca)", "Elon Musk", "Mr. Beast",
+        "Taylor Swift", "Bad Bunny", "Keanu Reeves", "Billie Eilish",
+        "Felipe Camiroaga", "Don Francisco", "Stefan Kramer", "Gary Medel",
+        "Arturo Vidal", "Alexis Sánchez", "Mon Laferte", "Daddy Yankee",
+        "Mickey Mouse", "Bugs Bunny", "Sherlock Holmes", "Joker",
+        "Wonder Woman", "Superman", "Elsa (Frozen)", "Pikachu",
+        "Jack Sparrow", "Indiana Jones", "Tony Montana", "Vito Corleone",
+        "John Wick", "Naruto Uzumaki", "Wednesday Addams", "Barbie",
+        "Oppenheimer", "Mario Bros"
+    ],
+    "Cultura Chilena": [
+        "Plaza Italia", "Metro de Santiago", "La Micro", "Fantasilandia", 
+        "La Moneda", "Viña del Mar", "Cordillera de los Andes", "Vega Central", 
+        "31 Minutos", "Condorito", "Estadio Nacional", "La Piojera",
+        "Cuesta Caracoles", "Torres del Paine", "Mano del Desierto", "Reloj de Flores",
+        "Festival de Viña", "Parada Militar", "Teletón", "Fondas de Fiestas Patrias",
+        "Cerro Santa Lucía", "San Cristóbal", "Costanera Center", "Puente Condell",
+        "Terminal Sur", "Biobío (Persa)", "Quilicura", "Maipú",
+        "Puente Alto", "Valparaíso (Cerros)", "Palafitos de Chiloé", "Moais",
+        "Ruta 5 Sur", "Desierto Florido", "Laguna del Inca", "Cajón del Maipo",
+        "Mercado Central", "La Chascona", "Sewell", "Humberstone",
+        "Pichilemu (Surf)", "Pucón", "Villarrica", "Frutillar",
+        "Puerto Varas", "Punta Arenas (Viento)", "Antofagasta (La Portada)", "Iquique (Zofri)",
+        "Chinchorro (Momias)", "Lota (Mina)"
+    ],
+    "Lugares Comunes": [
+        "Playa", "Cementerio", "Motel", "Hospital", "Cárcel", 
+        "Aeropuerto", "Gimnasio", "Biblioteca", "Zoologico", "Cine",
+        "Supermercado", "Mall", "Farmacia", "Feria Libre", "Paradero",
+        "Estación de Tren", "Terminal de Buses", "Escuela / Colegio", "Universidad", "Banco",
+        "Plaza de Armas", "Parque", "Estadio", "Teatro", "Museo",
+        "Restaurante", "Pub / Bar", "Discoteca", "Iglesia", "Comisaría",
+        "Cuartel de Bomberos", "Veterinaria", "Peluquería", "Panadería", "Botillería",
+        "Taller Mecánico", "Ferretería", "Oficina", "Construcción", "Bosque",
+        "Río", "Montaña", "Piscina Pública", "Ascensor", "Estacionamiento",
+        "Sauna", "Casino", "Circo", "Frontera", "Kiosko"
+    ],
+    "Conceptos / Memes Chilenos": [ // Item extra añadido
+        "El Mejor País de Chile", "Tío Aceite", "El Zafrada", "Chimuelo",
+        "Rosa Espinoza", "El Tarro", "Un manjar", "Anda a lavarte las patas",
+        "Tengo mello", "Víctima o Vistima", "Anday con la caña", "Hacer una vaca",
+        "Pasarlo chancho", "Estar pato", "El Caleuche", "La Pincoya",
+        "El Trauco", "El Chupacabras", "La Llorona", "Mandarse un condoro",
+        "Hablar puras cabezas de pescado", "Darse una vuelta carnero", "Estar arriba de la pelota", "Hacerse el larry",
+        "Irse a la punta del cerro", "Sacar la vuelta", "Ser buena leche", "Tirar la talla",
+        "Estar hasta las masas", "Ponerle color", "Estar pagando el noviciado", "Andar saltón",
+        "Hacerse el cucho", "Ser un siete", "Tener buen cuero", "Estar en la pitilla",
+        "Mojarse el potito", "Ser un barsa", "Tirar para arriba", "Quedar como chaleco de mono",
+        "Dar jugo", "Pasar piola", "Estar pal gato", "Hacer una completada",
+        "Pedir la de más", "Salirse de madre", "Vender la pomada", "Estar de miedo",
+        "Estar en la quemada", "Ser carne de perro"
+    ]
+    };
 
         // --- LÓGICA DEL JUEGO ---
         let players = [];
